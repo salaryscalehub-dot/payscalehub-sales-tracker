@@ -4,7 +4,8 @@ function doGet(e) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const customers = ss.getSheetByName('Customers').getDataRange().getValues();
   const followups = ss.getSheetByName('Followups').getDataRange().getValues();
-  return json_({ ok: true, customers: customers.slice(1), followups: followups.slice(1) });
+  const users = ss.getSheetByName('Users').getDataRange().getValues();
+  return json_({ ok: true, users: users.slice(1), customers: customers.slice(1), followups: followups.slice(1) });
 }
 
 function doPost(e) {
@@ -21,6 +22,9 @@ function doPost(e) {
       body.note || '',
       new Date()
     ]);
+  }
+  if (body.action === 'addUser') {
+    ss.getSheetByName('Users').appendRow([body.name || '', body.role || 'rep', 'active']);
   }
   if (body.action === 'addFollowup') {
     ss.getSheetByName('Followups').appendRow([
