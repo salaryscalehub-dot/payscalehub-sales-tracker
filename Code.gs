@@ -1,7 +1,10 @@
 const SPREADSHEET_ID = '1M-e5MPpH8huH469eGzrfFpyKFUErJq1d6TJFHzJbi30';
 
-function doGet() {
-  return json_({ ok: true, service: 'PayScale Hub Sales Tracker API' });
+function doGet(e) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const customers = ss.getSheetByName('Customers').getDataRange().getValues();
+  const followups = ss.getSheetByName('Followups').getDataRange().getValues();
+  return json_({ ok: true, customers: customers.slice(1), followups: followups.slice(1) });
 }
 
 function doPost(e) {
