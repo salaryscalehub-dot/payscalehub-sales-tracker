@@ -4,6 +4,7 @@ const seedCustomers=[{company:'شركة النور التجارية',person:'أ�
 let users=JSON.parse(localStorage.getItem('psh_users')||'null')||seedUsers;let customers=JSON.parse(localStorage.getItem('psh_customers')||'null')||seedCustomers;let app=document.getElementById('app');
 const today=()=>new Date().toISOString().slice(0,10);const tomorrow=()=>{let d=new Date();d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)};const fmt=d=>d?new Date(d+'T00:00:00').toLocaleDateString('ar-SA'): '—';
 async function loadData(){try{const r=await fetch(API_URL);const d=await r.json();if(d.ok&&Array.isArray(d.customers)){customers=d.customers.map(x=>({company:x[1],person:x[2],phone:x[3],rep:x[4],status:x[5]||'شركة محتملة',note:x[6]||'',followDate:x[7]||'',nextVisit:'',visits:[]}));}}catch(e){console.warn('API unavailable',e)}login()}
+
 async function apiPost(payload){try{await fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})}catch(e){console.warn('Save failed',e)}}
 function persist(){localStorage.setItem('psh_users',JSON.stringify(users));localStorage.setItem('psh_customers',JSON.stringify(customers))}
 function layout(body,user){app.innerHTML=`<div class="shell"><header class="top"><div class="brand">PayScale Hub<small>Sales Tracker</small></div><div class="user">${user||''}</div></header><section class="content">${body}</section></div>`}
